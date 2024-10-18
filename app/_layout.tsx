@@ -1,37 +1,59 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
-import 'react-native-reanimated';
+import { createStackNavigator } from "@react-navigation/stack";
+import CountdownScreen from "./Countdown";
+import SettingsScreen from "./Settings";
+import { DarkTheme, ThemeProvider } from "@react-navigation/native";
+import { Pressable } from "react-native";
+import { ThemedText } from "@/components/ThemedText";
+import { useNavigation } from "expo-router";
 
-import { useColorScheme } from '@/hooks/useColorScheme';
+type RootStackParamList = {
+  Countdown: undefined;
+  Settings: undefined;
+};
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.preventAutoHideAsync();
+const Stack = createStackNavigator<RootStackParamList>();
+
+declare global {
+  namespace ReactNavigation {
+    interface RootParamList extends RootStackParamList {}
+  }
+}
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
+  const navigation = useNavigation();
 
-  useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded]);
-
-  if (!loaded) {
-    return null;
-  }
+  const routes: Array<React.ComponentProps<typeof Stack.Screen>> = [
+    {
+      name: "Countdown",
+      component: CountdownScreen,
+      options: {
+        title: "ZiviCounter",
+        headerRight: () => (
+          <Pressable onPress={() => navigation.navigate("Settings")} style={{marginRight: 15}}>
+            <ThemedText>Settings</ThemedText>
+          </Pressable>
+        ),
+      },
+    },
+    {
+      name: "Settings",
+      component: SettingsScreen,
+    },
+  ];
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
+    <ThemeProvider value={DarkTheme}>
+      <Stack.Navigator
+        screenOptions={{
+          headerStyle: {
+            backgroundColor: "#a03fac",
+          },
+        }}
+      >
+        {routes.map((routeConfig) => (
+          <Stack.Screen key={routeConfig.name} {...routeConfig} />
+        ))}
+      </Stack.Navigator>
     </ThemeProvider>
   );
 }
