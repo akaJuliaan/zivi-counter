@@ -5,7 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from 'expo-router';
 import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
-import { DefaultTheme } from '@react-navigation/native';
+import Colors from './constants/Colors';
 
 const SettingsScreen = () => {
   const [date, setDate] = useState(new Date());
@@ -49,7 +49,7 @@ const SettingsScreen = () => {
       <ThemedText style={styles.date}>{date.toLocaleDateString()}</ThemedText>
 
       <ThemedView style={styles.buttonContainer}>
-        <Button title="Datum auswählen" onPress={() => setShowPicker(true)} color={DefaultTheme.colors.primary} />
+        <Button  title="Datum auswählen" onPress={() => setShowPicker(true)} color={Colors.colors.primary} />
 
         {showPicker && (
           <DateTimePicker
@@ -60,7 +60,7 @@ const SettingsScreen = () => {
           />
         )}
 
-        <Button title="Speichern" onPress={saveDate} color={DefaultTheme.colors.primary} />
+        <Button title="Speichern" onPress={saveDate} color={Colors.colors.primary} />
       </ThemedView>
     </ThemedView>
   );
