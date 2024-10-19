@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "zivi-counter",
-    "slug": "zivi-counter",
+    "name": "ZiviCounter",
+    "slug": "ZiviCounter",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -35,7 +35,7 @@
     },
     "extra": {
       "eas": {
-        "projectId": "f0275b1a-23d9-4b9a-88ac-4cde41ee8c1f"
+        "projectId": "14d71c57-0b8c-44bd-b731-9c608fbc8561"
       }
     }
   }
