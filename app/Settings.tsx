@@ -36,7 +36,7 @@ const SettingsScreen = () => {
 
   const saveDate = async () => {
     try {
-      await AsyncStorage.setItem('ziviStart', date.toISOString());
+      await AsyncStorage.setItem('ziviStart', date.toDateString());
       navigation.navigate("Countdown");
     } catch (error) {
       console.error('Fehler beim Speichern des Datums:', error);

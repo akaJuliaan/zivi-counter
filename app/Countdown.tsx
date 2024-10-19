@@ -7,6 +7,9 @@ import { ThemedText } from "@/components/ThemedText";
 
 interface TimeLeft {
   days: number;
+  hours: number;
+  minutes: number;
+  seconds: number;
   percentage: number;
 }
 
@@ -14,22 +17,31 @@ const calculateTimeLeft = (ziviStart: string): TimeLeft => {
   const now = new Date();
 
   const targetDate = new Date(ziviStart);
-  targetDate.setMonth(targetDate.getMonth() + 9)  
-
+  targetDate.setMonth(targetDate.getMonth() + 9);  
+  
   const millisLeft = targetDate.getTime() - now.getTime() - 24 * 60 * 60 * 1000;
   const workMillis = targetDate.getTime() - new Date(ziviStart).getTime() - 24 * 60 * 60 * 1000;
 
   const daysLeft = Math.floor(millisLeft / (1000 * 60 * 60 * 24));
+  const hoursLeft = Math.floor((millisLeft / (1000 * 60 * 60)) % 24);
+  const minutesLeft = Math.floor((millisLeft / (1000 * 60)) % 60);
+  const secondsLeft = Math.floor((millisLeft / 1000) % 60);
   const workDays = Math.floor(workMillis / (1000 * 60 * 60 * 24));
 
   let timeLeft: TimeLeft = {
     days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
     percentage: 0
   };
 
-  if (daysLeft > 0) {
+  if (secondsLeft > 0) {
     timeLeft = {
       days: daysLeft,
+      hours: hoursLeft,
+      minutes: minutesLeft,
+      seconds: secondsLeft,
       percentage: 100 / workDays * (workDays - daysLeft)
     };
   }
@@ -40,6 +52,9 @@ const calculateTimeLeft = (ziviStart: string): TimeLeft => {
 const CountdownPage = () => {
   const [timeLeft, setTimeLeft] = useState<TimeLeft>({
     days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
     percentage: 0
   });
   const [ziviStart, setZiviStart] = useState<string>("");
@@ -76,6 +91,7 @@ const CountdownPage = () => {
       <ThemedView style={styles.days}>
         <ThemedText style={styles.daysText}>{timeLeft.days}</ThemedText>
         <ThemedText style={styles.daysSubTitle}>Tage verbleibend</ThemedText>
+        <ThemedText>{timeLeft.hours} Stunden {timeLeft.minutes} Minuten {timeLeft.seconds} Sekunden</ThemedText>
       </ThemedView>
 
       <ThemedView>
@@ -105,6 +121,8 @@ const styles = StyleSheet.create({
   daysSubTitle: {
     fontSize: 21,
     lineHeight: 21,
+    textAlign: "center",
+    marginBottom: 10
   },
   countdown: {
     marginBottom: 10,
