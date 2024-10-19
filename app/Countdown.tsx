@@ -29,23 +29,13 @@ const calculateTimeLeft = (ziviStart: string): TimeLeft => {
   const workDays = Math.floor(workMillis / (1000 * 60 * 60 * 24));
 
   let timeLeft: TimeLeft = {
-    days: 0,
-    hours: 0,
-    minutes: 0,
-    seconds: 0,
-    percentage: 0
+    days: daysLeft,
+    hours: hoursLeft,
+    minutes: minutesLeft,
+    seconds: secondsLeft,
+    percentage: 100 / workDays * (workDays - daysLeft)
   };
-
-  if (secondsLeft > 0) {
-    timeLeft = {
-      days: daysLeft,
-      hours: hoursLeft,
-      minutes: minutesLeft,
-      seconds: secondsLeft,
-      percentage: 100 / workDays * (workDays - daysLeft)
-    };
-  }
-
+  
   return timeLeft;
 };
 
