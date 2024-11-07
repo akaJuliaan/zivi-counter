@@ -18,9 +18,9 @@ const calculateTimeLeft = (ziviStart: string): TimeLeft => {
 
   const targetDate = new Date(ziviStart);
   targetDate.setMonth(targetDate.getMonth() + 9);  
-  
-  const millisLeft = targetDate.getTime() - now.getTime() - 24 * 60 * 60 * 1000;
-  const workMillis = targetDate.getTime() - new Date(ziviStart).getTime() - 24 * 60 * 60 * 1000;
+    
+  const millisLeft = targetDate.getTime() - now.getTime() - 24 * 60 * 60 * 1000 - now.getTimezoneOffset() * 60_000;
+  const workMillis = targetDate.getTime() - new Date(ziviStart).getTime() - 24 * 60 * 60 * 1000 - now.getTimezoneOffset() * 60_000;
 
   const daysLeft = Math.floor(millisLeft / (1000 * 60 * 60 * 24));
   const hoursLeft = Math.floor((millisLeft / (1000 * 60 * 60)) % 24);
