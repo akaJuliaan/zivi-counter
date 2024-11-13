@@ -27,7 +27,7 @@ export default function RootLayout() {
       name: "Countdown",
       component: CountdownScreen,
       options: {
-        title: "ZiviCounter",
+        title: "Neue Lage",
         headerRight: () => (
           <Pressable onPress={() => navigation.navigate("Settings")} style={{marginRight: 15}}>
             <ThemedText>Settings</ThemedText>

@@ -13,14 +13,13 @@ interface TimeLeft {
   percentage: number;
 }
 
-const calculateTimeLeft = (ziviStart: string): TimeLeft => {
+const calculateTimeLeft = (lageStart: string, lageEnd: string): TimeLeft => {
   const now = new Date();
 
-  const targetDate = new Date(ziviStart);
-  targetDate.setMonth(targetDate.getMonth() + 9);  
+  const endDate = new Date(lageEnd);  
     
-  const millisLeft = targetDate.getTime() - now.getTime() - 24 * 60 * 60 * 1000 - now.getTimezoneOffset() * 60_000;
-  const workMillis = targetDate.getTime() - new Date(ziviStart).getTime() - 24 * 60 * 60 * 1000 - now.getTimezoneOffset() * 60_000;
+  const millisLeft = endDate.getTime() - now.getTime() - 24 * 60 * 60 * 1000 - now.getTimezoneOffset() * 60_000;
+  const workMillis = endDate.getTime() - new Date(lageStart).getTime() - 24 * 60 * 60 * 1000 - now.getTimezoneOffset() * 60_000;
 
   const daysLeft = Math.floor(millisLeft / (1000 * 60 * 60 * 24));
   const hoursLeft = Math.floor((millisLeft / (1000 * 60 * 60)) % 24);
@@ -29,11 +28,11 @@ const calculateTimeLeft = (ziviStart: string): TimeLeft => {
   const workDays = Math.floor(workMillis / (1000 * 60 * 60 * 24));
 
   let timeLeft: TimeLeft = {
-    days: daysLeft,
-    hours: hoursLeft,
-    minutes: minutesLeft,
-    seconds: secondsLeft,
-    percentage: 100 / workDays * (workDays - daysLeft)
+    days: Math.max(daysLeft, 0) ?? 0,
+    hours: Math.max(hoursLeft, 0) ?? 0,
+    minutes: Math.max(minutesLeft, 0) ?? 0,
+    seconds: Math.max(secondsLeft, 0) ?? 0,
+    percentage: Math.min(100 / workDays * (workDays - daysLeft), 100) ?? 0
   };
   
   return timeLeft;
@@ -47,34 +46,37 @@ const CountdownPage = () => {
     seconds: 0,
     percentage: 0
   });
-  const [ziviStart, setZiviStart] = useState<string>("");
+  const [lageStart, setLageStart] = useState<string>("");
+  const [lageEnd, setLageEnd] = useState<string>("");
 
   useFocusEffect(
     useCallback(() => {
-      const loadEndDate = async () => {
+      const loadDates = async () => {
         try {
-          const storedZiviStart = await AsyncStorage.getItem("ziviStart");
-          if (storedZiviStart) {
-            setZiviStart(storedZiviStart);
+          const storedlageStart = await AsyncStorage.getItem("lageStart");
+          const storedlageEnd = await AsyncStorage.getItem("lageEnd");
+          if (storedlageStart && storedlageEnd) {
+            setLageStart(storedlageStart);
+            setLageEnd(storedlageEnd);
           }
         } catch (error) {
           console.error("Fehler beim Laden des Datums:", error);
         }
       };
 
-      loadEndDate();
+      loadDates();
     }, [])
   );
 
   useEffect(() => {
-    if (ziviStart) {
+    if (lageStart && lageEnd) {
       const timer = setInterval(() => {
-        setTimeLeft(calculateTimeLeft(ziviStart));
+        setTimeLeft(calculateTimeLeft(lageStart, lageEnd));
       }, 1000);
 
       return () => clearInterval(timer);
     }
-  }, [ziviStart]);
+  }, [lageStart, lageEnd]);
 
   return (
     <ThemedView style={styles.container}>

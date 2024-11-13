@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "ZiviCounter",
-    "slug": "ZiviCounter",
+    "name": "Neue Lage",
+    "slug": "neue-lage",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -25,7 +25,7 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "cc.julian.zivicounter"
+      "package": "cc.julian.neue_lage"
     },
     "web": {
       "bundler": "metro",
@@ -40,8 +40,9 @@
     },
     "extra": {
       "eas": {
-        "projectId": "14d71c57-0b8c-44bd-b731-9c608fbc8561"
+        "projectId": "0b6d9f47-3144-4ad9-ad70-c6be98fca827"
       }
-    }
+    },
+    "owner": "juliaan"
   }
 }
